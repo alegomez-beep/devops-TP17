@@ -36,3 +36,28 @@ raíz-del-repositorio/             # ejecutar Git y editar .github aquí
 * **Modelo de Arquitectura (`devops-tp12/threagile.yaml`):** Definición declarativa de los activos de datos (notas, credenciales, métricas), activos técnicos (Ingress, Nginx, Flask Backend, PostgreSQL, Prometheus, Grafana, API Server) y enlaces de comunicación con sus respectivos protocolos.
 * **Evaluación de Riesgos y Risk Tracking:** Identificación automática de vectores de ataque (SQLi, XSS, Path Traversal, comunicación no cifrada) y gestión de excepciones aceptadas para el entorno de laboratorio local.
 * **Automatización en GitHub Actions:** Adición del job `threat-modeling` en `.github/workflows/cicd.yml` que ejecuta Threagile en cada integración y publica el reporte PDF y el diagrama de flujo de datos (DFD) como artefacto descargable (`threagile-report`).
+ 
+## TP16 — Escaneo de Seguridad de Contenedores, Dependencias e IaC con Trivy (Pipeline 3 Fases) 
+ 
+Integración de **Trivy** en la fábrica de software (CI/CD) aplicando la arquitectura de **3 Fases con Paso de Artefactos** y la resolución de falsos positivos mediante el patrón **Render First (TP10B)**. 
+ 
+### Matriz de Control e Integración (Formato CSV) 
+```csv 
+Fase / Job;Dominio Evaluado;Severidades;Exit Code;Acción ante Hallazgos;Evidencia 
+Fase 1: build-and-package;Compilación Docker;-;0;Exporta app-image.tar como artefacto;Artefacto en GitHub Actions 
+Fase 2A: trivy-andon-cord;SCA, Contenedor e IaC Renderizado (TP10B);HIGH, CRITICAL;1;Andon Cord: Detiene el pipeline y bloquea el despliegue;Resumen en $GITHUB_STEP_SUMMARY 
+Fase 2B: trivy-audit-report;Contenedores y Dependencias;LOW, MEDIUM;0;Informativo: Genera reporte de inspección;Artifact descargable + $GITHUB_STEP_SUMMARY 
+Fase 3: deploy-k8s-helm;Publicación y Despliegue;-;0;Promueve la imagen aprobada a Docker Hub y Helm;Release en Kubernetes 
+
+Comandos de Auditoría Local 
+
+# 1. Auditoría SCA 
+trivy fs ./backend 
+ 
+# 2. Auditoría de Imagen 
+trivy image devops-portfolio:latest 
+ 
+# 3. Renderizado previo e IaC Scanning (TP10B) 
+helm template mi-app ./devops-portfolio -f devops-portfolio/values-prod.yaml > manifests-rendered-prod.yaml 
+trivy config manifests-rendered-prod.yaml 
+

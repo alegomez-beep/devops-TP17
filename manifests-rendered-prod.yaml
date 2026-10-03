@@ -25,9 +25,9 @@ metadata:
     environment: production
 type: Opaque
 data:
-  POSTGRES_USER:     cG9zdGdyZXM=
+  POSTGRES_USER: cG9zdGdyZXM=
   POSTGRES_PASSWORD: c3VwZXItc2VjcmV0LXByb2QtcGFzc3dvcmQ=
-  POSTGRES_DB:       bm90ZXNkYg==
+  POSTGRES_DB: bm90ZXNkYg==
 ---
 # Source: devops-portfolio/templates/configmap.yaml
 apiVersion: v1
@@ -42,12 +42,12 @@ metadata:
     app.kubernetes.io/version: 1.0.0
     environment: production
 data:
-  DB_HOST:       "postgres-service"
-  DB_PORT:       "5432"
-  DB_NAME:       "notesdb"
-  APP_ENV:       "production"
-  APP_VERSION:   "1.0.0"
-  PORT:          "5000"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "notesdb"
+  APP_ENV: "production"
+  APP_VERSION: "1.0.0"
+  PORT: "5000"
 ---
 # Source: devops-portfolio/templates/postgres.yaml
 # ── PersistentVolumeClaim ─────────────────────────────────
@@ -143,8 +143,8 @@ metadata:
     environment: production
   annotations:
     # Fuerza re-deploy cuando cambia el configmap o secret
-    checksum/config: c64805cad163fdfb74da3eb602c505b6622631ec511daaaf5d8796f13f7903da
-    checksum/secret: 38d9f2b90a2cd6e5162e74ff17eb43642928e0262e0fea36c7bd451fdbad1ea2
+    checksum/config: 95452e07be962c2fdf981b5a79932744dc5d97f2bfee630687ac7e6fcef77c8f
+    checksum/secret: a81d7b129039c27fd972aad6e380f1c47ff058fffe01a1657ac4c917ac40494b
 spec:
   replicas: 3
   selector:
