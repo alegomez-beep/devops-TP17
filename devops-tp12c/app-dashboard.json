@@ -1,0 +1,56 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "title": "Sad Paths & Security Events - Tasa de Peticiones Anómalas (HTTP 401/403/500)",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "sum(rate(app_requests_total{status=~\"401|403|500\"}[1m])) by (status, endpoint)",
+          "legendFormat": "{{status}} - {{endpoint}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "title": "Sad Paths & Security Events - Reinicios de Pods por Namespace",
+      "type": "gauge",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "sum(changes(kube_pod_container_status_restarts_total{namespace=\"devops-portfolio\"}[15m]))",
+          "legendFormat": "Reinicios (15m)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "title": "Sad Paths & Security Events - Errores de Base de Datos y Excepciones",
+      "type": "table",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "increase(app_db_errors_total[1h])",
+          "legendFormat": "Errores DB (1h)",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["ciberseguridad", "tp12c"],
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Notes App - Sad Paths & Security Events",
+  "version": 1
+}
